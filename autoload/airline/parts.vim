@@ -150,11 +150,15 @@ function! airline#parts#spell()
 
     if g:airline_detect_spelllang !=? '0' && g:airline_detect_spelllang ==? 'flag'
       let spelllang = tolower(&spelllang)
-      if has_key(s:flags, spelllang)
-        return s:flags[spelllang]
-      elseif has_key(s:flags_noregion, spelllang)
-        return s:flags_noregion[spelllang]
-      endif
+      let res = ""
+      for s in split(spelllang, ',')
+        if has_key(s:flags, s)
+          let res = res . s:flags[s]
+        elseif has_key(s:flags_noregion, s)
+          let res = res . s:flags_noregion[s]
+        endif
+      endfor
+      return res
     endif
 
     let winwidth = airline#util#winwidth()
